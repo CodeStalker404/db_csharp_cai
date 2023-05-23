@@ -14,16 +14,20 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        public Form1()
-        {
-            InitializeComponent();
-        }
+
         DataSet dsProfesores;
         SqlDataAdapter da;
         //variable que indica en qué registro estamos situados.
 
         private int pos;
         private int maxRegistros;
+
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
 
         private void mostrarRegistro (int pos)
         {
@@ -40,6 +44,8 @@ namespace WindowsFormsApp1
             txtApellidos.Text = dRegistro[2].ToString();
             txtTelefono.Text = dRegistro[3].ToString();
             txtEmail.Text = dRegistro[4].ToString();
+
+            this.lblRegistros.Text = "Registro " + pos + " de " + maxRegistros;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -62,7 +68,8 @@ namespace WindowsFormsApp1
 
             //Situamos la primera posición.
 
-            pos = 0;
+            //TODO revisar posiciones
+            pos = 1;
             mostrarRegistro(pos);
 
             //Obtenemos el número de registros
@@ -96,10 +103,12 @@ namespace WindowsFormsApp1
             if (pos<0)
             {   //descativamos el botón
                 btn.Enabled = false;
+                this.bPrimero.Enabled = false;
             }
             else
             {   //activamos el botón
-                btn.Enabled = true;
+                this.bSiguiente.Enabled = true;
+                this.bUltimo.Enabled = true;
                 mostrarRegistro(pos);
             }
             
@@ -111,18 +120,20 @@ namespace WindowsFormsApp1
             //He cambiado el tipo del objeto sender a botón (castear)
             Button btn = sender as Button;
 
+
             // Vamos a la posición siguiente
             pos++;
-            if (pos == maxRegistros)
+            if (pos >= maxRegistros)
             {   //desactivamos el botón
-                btn.Enabled = false; 
+                btn.Enabled = false;
+                this.bUltimo.Enabled = false;
             } 
 
             else
             {   //activamos el botón
                 btn.Enabled= true;
+                this.bAnterior.Enabled = true;
                 mostrarRegistro(pos);
-                
             }
 
             

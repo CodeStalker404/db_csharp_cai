@@ -39,14 +39,15 @@
             this.Apellidos = new System.Windows.Forms.Label();
             this.email = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bEliminar = new System.Windows.Forms.Button();
+            this.bActualizar = new System.Windows.Forms.Button();
+            this.bguardar = new System.Windows.Forms.Button();
+            this.bAnyadir = new System.Windows.Forms.Button();
             this.bUltimo = new System.Windows.Forms.Button();
             this.bSiguiente = new System.Windows.Forms.Button();
             this.bAnterior = new System.Windows.Forms.Button();
             this.bPrimero = new System.Windows.Forms.Button();
-            this.bAnyadir = new System.Windows.Forms.Button();
-            this.bguardar = new System.Windows.Forms.Button();
-            this.bActualizar = new System.Windows.Forms.Button();
-            this.bEliminar = new System.Windows.Forms.Button();
+            this.lblRegistros = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -148,6 +149,46 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Navegar";
             // 
+            // bEliminar
+            // 
+            this.bEliminar.Location = new System.Drawing.Point(356, 95);
+            this.bEliminar.Name = "bEliminar";
+            this.bEliminar.Size = new System.Drawing.Size(96, 33);
+            this.bEliminar.TabIndex = 7;
+            this.bEliminar.Text = "Eliminar";
+            this.bEliminar.UseVisualStyleBackColor = true;
+            this.bEliminar.Click += new System.EventHandler(this.bEliminar_Click);
+            // 
+            // bActualizar
+            // 
+            this.bActualizar.Location = new System.Drawing.Point(247, 95);
+            this.bActualizar.Name = "bActualizar";
+            this.bActualizar.Size = new System.Drawing.Size(96, 33);
+            this.bActualizar.TabIndex = 6;
+            this.bActualizar.Text = "Actualizar";
+            this.bActualizar.UseVisualStyleBackColor = true;
+            this.bActualizar.Click += new System.EventHandler(this.bActualizar_Click);
+            // 
+            // bguardar
+            // 
+            this.bguardar.Location = new System.Drawing.Point(130, 95);
+            this.bguardar.Name = "bguardar";
+            this.bguardar.Size = new System.Drawing.Size(99, 33);
+            this.bguardar.TabIndex = 5;
+            this.bguardar.Text = "Guardar";
+            this.bguardar.UseVisualStyleBackColor = true;
+            this.bguardar.Click += new System.EventHandler(this.bguardar_Click);
+            // 
+            // bAnyadir
+            // 
+            this.bAnyadir.Location = new System.Drawing.Point(19, 95);
+            this.bAnyadir.Name = "bAnyadir";
+            this.bAnyadir.Size = new System.Drawing.Size(98, 33);
+            this.bAnyadir.TabIndex = 4;
+            this.bAnyadir.Text = "Añadir";
+            this.bAnyadir.UseVisualStyleBackColor = true;
+            this.bAnyadir.Click += new System.EventHandler(this.bAnyadir_Click);
+            // 
             // bUltimo
             // 
             this.bUltimo.Location = new System.Drawing.Point(356, 40);
@@ -188,51 +229,21 @@
             this.bPrimero.UseVisualStyleBackColor = true;
             this.bPrimero.Click += new System.EventHandler(this.bPrimero_Click);
             // 
-            // bAnyadir
+            // lblRegistros
             // 
-            this.bAnyadir.Location = new System.Drawing.Point(19, 95);
-            this.bAnyadir.Name = "bAnyadir";
-            this.bAnyadir.Size = new System.Drawing.Size(98, 33);
-            this.bAnyadir.TabIndex = 4;
-            this.bAnyadir.Text = "Añadir";
-            this.bAnyadir.UseVisualStyleBackColor = true;
-            this.bAnyadir.Click += new System.EventHandler(this.bAnyadir_Click);
-            // 
-            // bguardar
-            // 
-            this.bguardar.Location = new System.Drawing.Point(130, 95);
-            this.bguardar.Name = "bguardar";
-            this.bguardar.Size = new System.Drawing.Size(99, 33);
-            this.bguardar.TabIndex = 5;
-            this.bguardar.Text = "Guardar";
-            this.bguardar.UseVisualStyleBackColor = true;
-            this.bguardar.Click += new System.EventHandler(this.bguardar_Click);
-            // 
-            // bActualizar
-            // 
-            this.bActualizar.Location = new System.Drawing.Point(247, 95);
-            this.bActualizar.Name = "bActualizar";
-            this.bActualizar.Size = new System.Drawing.Size(96, 33);
-            this.bActualizar.TabIndex = 6;
-            this.bActualizar.Text = "Actualizar";
-            this.bActualizar.UseVisualStyleBackColor = true;
-            this.bActualizar.Click += new System.EventHandler(this.bActualizar_Click);
-            // 
-            // bEliminar
-            // 
-            this.bEliminar.Location = new System.Drawing.Point(356, 95);
-            this.bEliminar.Name = "bEliminar";
-            this.bEliminar.Size = new System.Drawing.Size(96, 33);
-            this.bEliminar.TabIndex = 7;
-            this.bEliminar.Text = "Eliminar";
-            this.bEliminar.UseVisualStyleBackColor = true;
-            this.bEliminar.Click += new System.EventHandler(this.bEliminar_Click);
+            this.lblRegistros.AutoSize = true;
+            this.lblRegistros.Location = new System.Drawing.Point(482, 85);
+            this.lblRegistros.Name = "lblRegistros";
+            this.lblRegistros.Size = new System.Drawing.Size(33, 16);
+            this.lblRegistros.TabIndex = 11;
+            this.lblRegistros.Text = "asdf";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(840, 535);
+            this.Controls.Add(this.lblRegistros);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.email);
             this.Controls.Add(this.Apellidos);
@@ -274,6 +285,7 @@
         private System.Windows.Forms.Button bAnyadir;
         private System.Windows.Forms.Button bEliminar;
         private System.Windows.Forms.Button bActualizar;
+        private System.Windows.Forms.Label lblRegistros;
     }
 }
 
