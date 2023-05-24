@@ -45,7 +45,7 @@ namespace WindowsFormsApp1
             txtTelefono.Text = dRegistro[3].ToString();
             txtEmail.Text = dRegistro[4].ToString();
 
-            this.lblRegistros.Text = "Registro " + pos + " de " + maxRegistros;
+            this.lblRegistros.Text = "Registro " + (pos+1) + " de " + maxRegistros;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -66,14 +66,12 @@ namespace WindowsFormsApp1
 
             da.Fill(dsProfesores, "Profesores");
 
-            //Situamos la primera posición.
-
-            //TODO revisar posiciones
-            pos = 1;
-            mostrarRegistro(pos);
-
             //Obtenemos el número de registros
             maxRegistros = dsProfesores.Tables["Profesores"].Rows.Count;
+
+            //Situamos la primera posición.
+            pos = 0;
+            mostrarRegistro(pos);
              
             //cerramos la conexión
             con.Close();
@@ -84,32 +82,37 @@ namespace WindowsFormsApp1
 
         private void bPrimero_Click(object sender, EventArgs e)
         {
-            // Ponemos la primera posición
-            pos = 0;
-            mostrarRegistro(pos);
-        }
-
-        private void bAnterior_Click(object sender, EventArgs e)
-        {
             //Para saber qué tipo de objetco es sender
             Console.WriteLine(sender.GetType().Name);
 
             //He cambiado el tipo del objeto sender a botón (castear)
             Button btn = sender as Button;
 
+            // Ponemos la primera posición
+            pos = 0;
+            mostrarRegistro(pos);
+            btn.Enabled = false;
+            this.bAnterior.Enabled = false;
+            this.bSiguiente.Enabled = true;
+            this.bUltimo.Enabled = true;
+        }
+
+        private void bAnterior_Click(object sender, EventArgs e)
+        {
+            //He cambiado el tipo del objeto sender a botón (castear)
+            Button btn = sender as Button;
 
             // Vamos a la posición anterior.
             pos--;
-            if (pos<0)
+
+            //activamos el botón
+            this.bSiguiente.Enabled = true;
+            this.bUltimo.Enabled = true;
+            mostrarRegistro(pos);
+            if (pos <= 0)
             {   //descativamos el botón
                 btn.Enabled = false;
                 this.bPrimero.Enabled = false;
-            }
-            else
-            {   //activamos el botón
-                this.bSiguiente.Enabled = true;
-                this.bUltimo.Enabled = true;
-                mostrarRegistro(pos);
             }
             
         }
@@ -120,31 +123,32 @@ namespace WindowsFormsApp1
             //He cambiado el tipo del objeto sender a botón (castear)
             Button btn = sender as Button;
 
-
             // Vamos a la posición siguiente
             pos++;
-            if (pos >= maxRegistros)
-            {   //desactivamos el botón
+            Console.WriteLine(pos.ToString());
+
+            this.bAnterior.Enabled = true;
+            this.bPrimero.Enabled = true;
+            mostrarRegistro(pos);
+            if(pos >= maxRegistros-1)
+            {
                 btn.Enabled = false;
                 this.bUltimo.Enabled = false;
-            } 
-
-            else
-            {   //activamos el botón
-                btn.Enabled= true;
-                this.bAnterior.Enabled = true;
-                mostrarRegistro(pos);
             }
-
             
         }
 
         private void bUltimo_Click(object sender, EventArgs e)
         {
+            Button btn = sender as Button;
             // Vamos a la última posición.
             // Los registros van del 0 al numero de registros - 1
             pos = maxRegistros - 1;
             mostrarRegistro(pos);
+            btn.Enabled = false;
+            this.bSiguiente.Enabled = false;
+            this.bAnterior.Enabled = true;
+            this.bPrimero.Enabled = true;
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
