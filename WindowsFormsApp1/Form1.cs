@@ -151,11 +151,6 @@ namespace WindowsFormsApp1
             this.bPrimero.Enabled = true;
         }
 
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void bAnyadir_Click(object sender, EventArgs e)
         {
             txtDni.Clear();
@@ -223,6 +218,16 @@ namespace WindowsFormsApp1
             SqlCommandBuilder cb = new SqlCommandBuilder(da);
             da.Update(dsProfesores, "Profesores");
 
+        }
+
+        private void txtApellidos_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtApellidos = sender as TextBox;
+
+            Console.WriteLine(e.GetType());
+            Console.WriteLine(e);
+
+            Console.WriteLine(txtApellidos.Text);
         }
     }
 }

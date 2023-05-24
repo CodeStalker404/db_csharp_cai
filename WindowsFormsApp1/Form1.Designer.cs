@@ -78,7 +78,7 @@
             this.txtApellidos.Name = "txtApellidos";
             this.txtApellidos.Size = new System.Drawing.Size(100, 22);
             this.txtApellidos.TabIndex = 3;
-            this.txtApellidos.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            this.txtApellidos.TextChanged += new System.EventHandler(this.txtApellidos_TextChanged);
             // 
             // txtEmail
             // 
@@ -232,11 +232,11 @@
             // lblRegistros
             // 
             this.lblRegistros.AutoSize = true;
-            this.lblRegistros.Location = new System.Drawing.Point(482, 85);
+            this.lblRegistros.Location = new System.Drawing.Point(436, 85);
             this.lblRegistros.Name = "lblRegistros";
-            this.lblRegistros.Size = new System.Drawing.Size(33, 16);
+            this.lblRegistros.Size = new System.Drawing.Size(65, 16);
             this.lblRegistros.TabIndex = 11;
-            this.lblRegistros.Text = "asdf";
+            this.lblRegistros.Text = "Registros";
             // 
             // Form1
             // 
