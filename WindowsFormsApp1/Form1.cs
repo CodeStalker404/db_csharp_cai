@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Runtime.Remoting.Contexts;
+using System.Text.RegularExpressions;
+using System.Net;
 
 namespace WindowsFormsApp1
 {
@@ -50,9 +52,10 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string cadenaConexion = "Data Source = (LocalDB)\\MSSQLLocalDB;" +
-               "AttachDbFilename = C:\\Users\\Cai\\OneDrive\\Escritorio\\DAW\\PROGRAMACIÓN\\tema 9\\ejercicios\\Instituto.mdf;" +
-               "Integrated Security = True; Connect Timeout = 30";
+            string cadenaConexion = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\JRJ_1\\Projects\\db_csharp_cai\\Instituto.mdf;Integrated Security=True;Connect Timeout=30";
+            //string cadenaConexion = "Data Source = (LocalDB)\\MSSQLLocalDB;" +
+            //   "AttachDbFilename = C:\\Users\\Cai\\OneDrive\\Escritorio\\DAW\\PROGRAMACIÓN\\tema 9\\ejercicios\\Instituto.mdf;" +
+            //   "Integrated Security = True; Connect Timeout = 30";
 
             SqlConnection con = new SqlConnection(cadenaConexion);
 
@@ -79,6 +82,54 @@ namespace WindowsFormsApp1
             
 
         }
+
+
+
+        private void bsave_Click(object sender, EventArgs e)
+        {
+            //Creamos un nuevo registro.
+            DataRow dRegistro = dsProfesores.Tables["Profesores"].NewRow();
+
+
+
+            //Metemos los datos en el nuevo registro
+            dRegistro[0] = txtDni.Text;
+            dRegistro[1] = txtNombre.Text;
+            dRegistro[2] = txtApellidos.Text;
+            dRegistro[3] = txtTelefono.Text;
+            dRegistro[4] = txtEmail.Text;
+
+
+            //Añadimos el registro al Dataset.
+            dsProfesores.Tables["Profesores"].Rows.Add(dRegistro);
+
+            //Reconectamos con el dataAdapter y acutalizamos la Base de Datos.
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.Update(dsProfesores, "Profesores");
+
+            //Actualizamos el número de registros y la posición en la tabla.
+            maxRegistros++;
+            pos = maxRegistros - 1;
+        }
+
+        private bool EsDniValido(string dni)
+        {
+            ////Creamos expresión regular para validar el formato del DNI
+            //string pattern = @"^\d{8}[A-HJ-NP-TV-Z]$";
+
+            ////Verificamos si el DNI coincide con el patrón
+            //Regex regex = new Regex(pattern);
+            //return regex.IsMatch(dni);
+            bool esDniValido = false;
+
+            if(dni.Length == 9)
+            {
+                char ultimoCaracter = dni.ElementAt(dni.Length - 1);
+                esDniValido = Char.IsLetter(ultimoCaracter);
+            }
+            return esDniValido;
+        }
+
 
         private void bPrimero_Click(object sender, EventArgs e)
         {
@@ -165,6 +216,8 @@ namespace WindowsFormsApp1
             //Creamos un nuevo registro.
             DataRow dRegistro = dsProfesores.Tables["Profesores"].NewRow();
 
+
+
             //Metemos los datos en el nuevo registro
             dRegistro[0] = txtDni.Text;
             dRegistro[1] = txtNombre.Text;
@@ -228,6 +281,16 @@ namespace WindowsFormsApp1
             Console.WriteLine(e);
 
             Console.WriteLine(txtApellidos.Text);
+        }
+
+        private void txtDni_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtDni = sender as TextBox;
+            if (!EsDniValido(txtDni.Text))
+            {
+                MessageBox.Show("DNI inválido. Introduzca un DNI válido.");
+                return;
+            }
         }
     }
 }
