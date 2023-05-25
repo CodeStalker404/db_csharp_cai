@@ -114,12 +114,6 @@ namespace WindowsFormsApp1
 
         private bool EsDniValido(string dni)
         {
-            ////Creamos expresión regular para validar el formato del DNI
-            //string pattern = @"^\d{8}[A-HJ-NP-TV-Z]$";
-
-            ////Verificamos si el DNI coincide con el patrón
-            //Regex regex = new Regex(pattern);
-            //return regex.IsMatch(dni);
             bool esDniValido = false;
 
             if(dni.Length == 9)
@@ -128,6 +122,51 @@ namespace WindowsFormsApp1
                 esDniValido = Char.IsLetter(ultimoCaracter);
             }
             return esDniValido;
+        }
+
+        private bool SonTodoLetras(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            foreach (char c in input)
+            {
+                if (!Char.IsLetter(c) && c != ' ')
+                {
+                    Console.WriteLine(c + " apesta");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool SonTodoNumeros(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            foreach (char c in input)
+            {
+                if (!Char.IsDigit(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool EsEmailValido(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return false;
+            }
+
+            return email.Contains("@") && email.Contains(".");
         }
 
 
@@ -273,23 +312,55 @@ namespace WindowsFormsApp1
 
         }
 
-        private void txtApellidos_TextChanged(object sender, EventArgs e)
-        {
-            TextBox txtApellidos = sender as TextBox;
-
-            Console.WriteLine(e.GetType());
-            Console.WriteLine(e);
-
-            Console.WriteLine(txtApellidos.Text);
-        }
-
         private void txtDni_TextChanged(object sender, EventArgs e)
         {
             TextBox txtDni = sender as TextBox;
             if (!EsDniValido(txtDni.Text))
             {
+                this.lblValidacionDNI.Text = "DNI inválido. Introduzca un DNI válido.";
+                this.lblValidacionDNI.Visible = true;
                 MessageBox.Show("DNI inválido. Introduzca un DNI válido.");
-                return;
+            }
+            else
+            {
+                this.Visible = false;
+            }
+        }
+
+        private void txtNombre_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtNombre = sender as TextBox;
+            Console.WriteLine(txtNombre.Text);
+            if (!SonTodoLetras(txtNombre.Text))
+            {
+                MessageBox.Show("Nombre inválido. Un nombre solo puede contener letras y espacios.");
+            }
+        }
+
+        private void txtApellidos_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtApellidos = sender as TextBox;
+            if (!SonTodoLetras(txtApellidos.Text))
+            {
+                MessageBox.Show("Apellidos inválidos. Los apellidos solo pueden contener letras y espacios.");
+            }
+        }
+
+        private void txtTelefono_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtTelefono = sender as TextBox;
+            if (!SonTodoNumeros(txtTelefono.Text))
+            {
+                MessageBox.Show("Teléfono inválido. Un teléfono solo puede contener números.");
+            }
+        }
+
+        private void txtEmail_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtEmail = sender as TextBox;
+            if (!EsEmailValido(txtEmail.Text))
+            {
+                MessageBox.Show("Teléfono inválido. Un teléfono solo puede contener números.");
             }
         }
     }
