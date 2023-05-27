@@ -130,15 +130,34 @@ namespace WindowsFormsApp1
 
         public void eliminarProfesor(int pos)
         {
-            // Eliminamos el registro situado en la posición actual.
-            dsProfesores.Tables["Profesores"].Rows[pos].Delete();
+            if(numProfesores > 0)
+            {
+                // Eliminamos el registro situado en la posición actual.
+                dsProfesores.Tables["Profesores"].Rows[pos].Delete();
 
-            // Tenemos un profesor menos
-            numProfesores--;
+                // Tenemos un profesor menos
+                numProfesores--;
 
-            // Reconectamos con el dataAdapter y actualizamos la BD
-            SqlCommandBuilder cb = new SqlCommandBuilder(daProfesores);
-            daProfesores.Update(dsProfesores, "Profesores");
+                // Reconectamos con el dataAdapter y actualizamos la BD
+                SqlCommandBuilder cb = new SqlCommandBuilder(daProfesores);
+                daProfesores.Update(dsProfesores, "Profesores");
+            }
+        }
+
+        public bool DniRepetido(string dni)
+        {
+            bool dniRepetido = false;
+
+            for(int i = 0; i < NumProfesores; i++)
+            {
+                Profesor profesor = devuelveProfesor(i);
+                if (profesor != null && profesor.Dni == dni)
+                {
+                    dniRepetido = true;
+                }
+            }
+            
+            return dniRepetido;
         }
     }
 }

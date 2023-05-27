@@ -16,12 +16,6 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-
-        //DataSet dsProfesores;
-        //SqlDataAdapter da;
-        ////variable que indica en qué registro estamos situados.
-        ///////private int maxRegistros;
-
         // Instancia del objeto que maneja la BD.
         SqlDBHelper sqlDBHelper;
 
@@ -37,35 +31,6 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ////string cadenaConexion = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\JRJ_1\\Projects\\db_csharp_cai\\Instituto.mdf;Integrated Security=True;Connect Timeout=30";
-            //string cadenaConexion = "data source = (localdb)\\mssqllocaldb;" +
-            //   "attachdbfilename = c:\\users\\cai\\onedrive\\escritorio\\daw\\programación\\tema 9\\ejercicios\\instituto.mdf;" +
-            //   "integrated security = true; connect timeout = 30";
-
-            //SqlConnection con = new SqlConnection(cadenaConexion);
-
-            ////abrimos la conexión
-            //con.Open();
-
-            //dsProfesores = new DataSet();
-            //string cadenaSql = "SELECT * From Profesores";
-
-            //da = new SqlDataAdapter(cadenaSql, con);
-
-            //da.Fill(dsProfesores, "Profesores");
-
-            ////Obtenemos el número de registros
-            //maxRegistros = dsProfesores.Tables["Profesores"].Rows.Count;
-
-            ////Situamos la primera posición.
-            //pos = 0;
-            //mostrarRegistro(pos);
-
-            ////cerramos la conexión
-            //con.Close();
-
-
-
             // Creamos el objeto BD
             sqlDBHelper = new SqlDBHelper();
 
@@ -82,87 +47,121 @@ namespace WindowsFormsApp1
 
             profesor = sqlDBHelper.devuelveProfesor(pos);
             
-            //Cogemos el valor de cada una de las columnas del registro y lo ponemos en el txtBox correspondiente
-            txtDni.Text = profesor.Dni;
-            txtNombre.Text = profesor.Nombre;
-            txtApellidos.Text = profesor.Apellidos;
-            txtTelefono.Text = profesor.Tlf;
-            txtEmail.Text = profesor.eMail;
+            if(profesor == null)
+            {
+                txtDni.Text = "Sin datos";
+                txtNombre.Text = "Sin datos";
+                txtApellidos.Text = "Sin datos";
+                txtTelefono.Text = "Sin datos";
+                txtEmail.Text = "Sin datos";
+            }
+            else
+            {
+                //Cogemos el valor de cada una de las columnas del registro y lo ponemos en el txtBox correspondiente
+                txtDni.Text = profesor.Dni;
+                txtNombre.Text = profesor.Nombre;
+                txtApellidos.Text = profesor.Apellidos;
+                txtTelefono.Text = profesor.Tlf;
+                txtEmail.Text = profesor.eMail;
+            }
 
-            //TODO revisar número profesores
-            this.lblRegistros.Text = "Registro " + (pos + 1) + " de " + sqlDBHelper.NumProfesores;//maxRegistros;
+            HabilitarDeshabilitarBotones(pos);
+
+            this.lblRegistros.Text = "Registro " + (pos + 1) + " de " + sqlDBHelper.NumProfesores;
+        }
+
+        private void HabilitarDeshabilitarBotones(int pos)
+        {
+            if(pos == 0 && sqlDBHelper.NumProfesores == 0)
+            { // Si no hay ningún registro se deshabilitan todos
+                this.bPrimero.Enabled = false;
+                this.bAnterior.Enabled = false;
+                this.bUltimo.Enabled = false;
+                this.bSiguiente.Enabled = false;
+                // También deshabilitar botón Eliminar
+                this.bEliminar.Enabled = false;
+            }
+            else if (pos <= 0)
+            { // En la primera posición se deshabilitan los botones Primero y Anterior
+                this.bPrimero.Enabled = false;
+                this.bAnterior.Enabled = false;
+                this.bUltimo.Enabled = true;
+                this.bSiguiente.Enabled = true;
+            }
+            else if (pos >= sqlDBHelper.NumProfesores - 1)
+            { // En la última posición se deshabilitan los botones Último y Siguiente
+                this.bPrimero.Enabled = true;
+                this.bAnterior.Enabled = true;
+                this.bUltimo.Enabled = false;
+                this.bSiguiente.Enabled = false;
+            }
         }
 
 
         private void bPrimero_Click(object sender, EventArgs e)
         {
-            //Para saber qué tipo de objetco es sender
-            Console.WriteLine(sender.GetType().Name);
+            // Si no hay cambios se pasa a mostrar el primer registro
+            if (SePuedeCambiarDeRegistro())
+            {
+                //Para saber qué tipo de objetco es sender
+                Console.WriteLine(sender.GetType().Name);
 
-            //He cambiado el tipo del objeto sender a botón (castear)
-            Button btn = sender as Button;
+                //He cambiado el tipo del objeto sender a botón (castear)
+                Button btn = sender as Button;
 
-            // Ponemos la primera posición
-            pos = 0;
-            mostrarRegistro(pos);
-            btn.Enabled = false;
-            this.bAnterior.Enabled = false;
-            this.bSiguiente.Enabled = true;
-            this.bUltimo.Enabled = true;
+                // Ponemos la primera posición
+                pos = 0;
+                mostrarRegistro(pos);
+            }
         }
 
         private void bAnterior_Click(object sender, EventArgs e)
         {
-            //He cambiado el tipo del objeto sender a botón (castear)
-            Button btn = sender as Button;
+            // Si no hay cambios se pasa a mostrar el anterior registro
+            if (SePuedeCambiarDeRegistro())
+            {
+                //He cambiado el tipo del objeto sender a botón (castear)
+                Button btn = sender as Button;
 
-            // Vamos a la posición anterior.
-            pos--;
+                // Vamos a la posición anterior.
+                pos--;
 
-            //activamos el botón
-            this.bSiguiente.Enabled = true;
-            this.bUltimo.Enabled = true;
-            mostrarRegistro(pos);
-            if (pos <= 0)
-            {   //descativamos el botón
-                btn.Enabled = false;
-                this.bPrimero.Enabled = false;
+                //activamos el botón
+                this.bSiguiente.Enabled = true;
+                this.bUltimo.Enabled = true;
+                mostrarRegistro(pos);
             }
-
         }
 
         private void bSiguiente_Click(object sender, EventArgs e)
         {
-
-            //He cambiado el tipo del objeto sender a botón (castear)
-            Button btn = sender as Button;
-
-            // Vamos a la posición siguiente
-            pos++;
-            Console.WriteLine(pos.ToString());
-
-            this.bAnterior.Enabled = true;
-            this.bPrimero.Enabled = true;
-            mostrarRegistro(pos);
-            if (pos >= sqlDBHelper.NumProfesores - 1)
+            // Si no hay cambios se pasa a mostrar el siguiente registro
+            if (SePuedeCambiarDeRegistro())
             {
-                btn.Enabled = false;
-                this.bUltimo.Enabled = false;
-            }
+                //He cambiado el tipo del objeto sender a botón (castear)
+                Button btn = sender as Button;
 
+                // Vamos a la posición siguiente
+                pos++;
+                Console.WriteLine(pos.ToString());
+
+                this.bAnterior.Enabled = true;
+                this.bPrimero.Enabled = true;
+                mostrarRegistro(pos);
+            }
         }
 
         private void bUltimo_Click(object sender, EventArgs e)
         {
-            Button btn = sender as Button;
-            // Vamos a la última posición.
-            // Los registros van del 0 al numero de registros - 1
-            pos = sqlDBHelper.NumProfesores - 1;
-            mostrarRegistro(pos);
-            btn.Enabled = false;
-            this.bSiguiente.Enabled = false;
-            this.bAnterior.Enabled = true;
-            this.bPrimero.Enabled = true;
+            // Si no hay cambios se pasa a mostrar el último registro
+            if (SePuedeCambiarDeRegistro())
+            {
+                Button btn = sender as Button;
+                // Vamos a la última posición.
+                // Los registros van del 0 al numero de registros - 1
+                pos = sqlDBHelper.NumProfesores - 1;
+                mostrarRegistro(pos);
+            }
         }
 
 
@@ -223,8 +222,44 @@ namespace WindowsFormsApp1
             return email.Contains("@") && email.Contains(".");
         }
 
-
+        private bool SePuedeGuardar()
+        {
+            return EsDniValido(txtDni.Text)
+                // El DNI es clave primaria. No puede estar repetido, o lanza excepción.
+                && !sqlDBHelper.DniRepetido(txtDni.Text)
+                && SonTodoLetras(txtNombre.Text)
+                && SonTodoLetras(txtApellidos.Text)
+                && SonTodoNumeros(txtTelefono.Text)
+                && EsEmailValido(txtEmail.Text);
+        }
         
+        private bool HayCambiosEnRegistroActual()
+        {
+            Profesor profesor = this.sqlDBHelper.devuelveProfesor(pos);
+
+            bool hayCambios =
+                profesor.Dni != txtDni.Text
+                || profesor.Nombre != txtNombre.Text
+                || profesor.Apellidos != txtApellidos.Text
+                || profesor.Tlf != txtTelefono.Text
+                || profesor.eMail != txtEmail.Text;
+
+            return hayCambios;
+        }
+
+        private bool SePuedeCambiarDeRegistro()
+        {
+            bool sePuedeCambiar = true;
+            // Si hay cambios en los textbox se pregunta al usuario si está seguro de querer continuar
+            if (HayCambiosEnRegistroActual())
+            {
+                DialogResult result = MessageBox.Show("Hay cambios en el registro actual. Los datos no guardados se perderán.", "¿Desea continuar? ", MessageBoxButtons.YesNo);
+
+                sePuedeCambiar = result.Equals(DialogResult.Yes);
+            }
+
+            return sePuedeCambiar;
+        }
 
         private void bAnyadir_Click(object sender, EventArgs e)
         {
@@ -237,14 +272,25 @@ namespace WindowsFormsApp1
 
         private void bguardar_Click(object sender, EventArgs e)
         {
-            //Creamos el profesor con los datos del formulario
-            Profesor profesor = new Profesor(txtDni.Text, txtNombre.Text,
-                txtApellidos.Text, txtTelefono.Text, txtEmail.Text);
+            if(SePuedeGuardar())
+            {
+                //Creamos el profesor con los datos del formulario
+                Profesor profesor = new Profesor(txtDni.Text, txtNombre.Text,
+                    txtApellidos.Text, txtTelefono.Text, txtEmail.Text);
 
-            sqlDBHelper.anyadirProfesor(profesor);
+                sqlDBHelper.anyadirProfesor(profesor);
 
-            //Actualizamos la posición en la tabla.
-            pos = sqlDBHelper.NumProfesores - 1;
+                //Actualizamos la posición en la tabla.
+                pos = sqlDBHelper.NumProfesores - 1;
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Hay campos con datos no válidos." +
+                    "\nO el DNI ya figura en la base de datos." +
+                    "\nRevise los datos introducidos."
+                );
+            }
         }
 
         private void bActualizar_Click(object sender, EventArgs e)
@@ -258,11 +304,27 @@ namespace WindowsFormsApp1
 
         private void bEliminar_Click(object sender, EventArgs e)
         {
-            sqlDBHelper.eliminarProfesor(pos);
+            // Mostramos cuadro de diálogo para pedir confirmación de eliminación al usuario.
+            DialogResult result = MessageBox.Show(
+                    "Si confirma se eliminará el registro actual. ¿Desea eliminarlo?",
+                    "¿Desea eliminar el registro actual? ",
+                    MessageBoxButtons.YesNo
+                );
 
-            // Nos vamos al primer registro y lo mostramos
-            pos = 0;
-            mostrarRegistro(pos);
+            // Respuesta del usuario a eliminar o no el registro.
+            bool eliminar = result.Equals(DialogResult.Yes);
+
+            // Se elimina el registro si el usuario ha respondido que Sí.
+            if (eliminar)
+            {
+                sqlDBHelper.eliminarProfesor(pos);
+
+                // Nos vamos al primer registro y lo mostramos
+                pos = 0;
+                mostrarRegistro(pos);
+                this.bUltimo.Enabled = true;
+                this.bSiguiente.Enabled = true;
+            }
         }
 
         private void txtDni_TextChanged(object sender, EventArgs e)
@@ -272,11 +334,10 @@ namespace WindowsFormsApp1
             {
                 this.lblValidacionDNI.Text = "DNI inválido. Introduzca un DNI válido.";
                 this.lblValidacionDNI.Visible = true;
-                MessageBox.Show("DNI inválido. Introduzca un DNI válido.");
             }
             else
             {
-                this.Visible = false;
+                this.lblValidacionDNI.Visible = false;
             }
         }
 
@@ -286,7 +347,12 @@ namespace WindowsFormsApp1
             Console.WriteLine(txtNombre.Text);
             if (!SonTodoLetras(txtNombre.Text))
             {
-                MessageBox.Show("Nombre inválido. Un nombre solo puede contener letras y espacios.");
+                this.lblValidacionNombre.Text = "Nombre inválido.\nSolo puede contener letras y espacios.";
+                this.lblValidacionNombre.Visible = true;
+            }
+            else
+            {
+                this.lblValidacionNombre.Visible = false;
             }
         }
 
@@ -295,7 +361,12 @@ namespace WindowsFormsApp1
             TextBox txtApellidos = sender as TextBox;
             if (!SonTodoLetras(txtApellidos.Text))
             {
-                MessageBox.Show("Apellidos inválidos. Los apellidos solo pueden contener letras y espacios.");
+                this.lblValidacionApellidos.Text = "Apellidos inválidos.\nSolo puede contener letras y espacios.";
+                this.lblValidacionApellidos.Visible = true;
+            }
+            else
+            {
+                this.lblValidacionApellidos.Visible = false;
             }
         }
 
@@ -304,7 +375,12 @@ namespace WindowsFormsApp1
             TextBox txtTelefono = sender as TextBox;
             if (!SonTodoNumeros(txtTelefono.Text))
             {
-                MessageBox.Show("Teléfono inválido. Un teléfono solo puede contener números.");
+                this.lblValidacionTlfn.Text = "Teléfono inválido.\nSolo puede contener números.";
+                this.lblValidacionTlfn.Visible = true;
+            }
+            else
+            {
+                this.lblValidacionTlfn.Visible = false;
             }
         }
 
@@ -313,7 +389,12 @@ namespace WindowsFormsApp1
             TextBox txtEmail = sender as TextBox;
             if (!EsEmailValido(txtEmail.Text))
             {
-                MessageBox.Show("Teléfono inválido. Un teléfono solo puede contener números.");
+                this.lblValidacionEmail.Text = "Email inválido.\nDebe contener una \'@\' y un punto.";
+                this.lblValidacionEmail.Visible = true;
+            }
+            else
+            {
+                this.lblValidacionEmail.Visible = false;
             }
         }
     }
