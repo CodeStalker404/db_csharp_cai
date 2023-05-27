@@ -322,8 +322,6 @@ namespace WindowsFormsApp1
                 // Nos vamos al primer registro y lo mostramos
                 pos = 0;
                 mostrarRegistro(pos);
-                this.bUltimo.Enabled = true;
-                this.bSiguiente.Enabled = true;
             }
         }
 
